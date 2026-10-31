@@ -1,0 +1,126 @@
+import type { DemoScenario } from "@/types/scenario";
+
+export const DEMO_SCENARIOS: DemoScenario[] = [
+  {
+    id: "safe-payment",
+    name: "Safe Payment",
+    description: "Known recipient, modest amount, no scam context.",
+    message: "Dinner split from last night. Paying Rahul as discussed.",
+    url: "",
+    amount: 500,
+    recipientName: "Rahul Sharma",
+    recipientUpi: "rahul.sharma@oksbi",
+    newRecipient: false,
+    knownRecipient: true,
+    device: {
+      remoteAccess: false,
+      screenSharing: false,
+      unknownSource: false,
+      accessibilityRisk: false,
+    },
+    expectedDecision: "ALLOW",
+  },
+  {
+    id: "fake-bank-kyc",
+    name: "Fake Bank KYC",
+    description: "KYC expiry lure with a suspicious link and a new recipient.",
+    message:
+      "Your bank KYC has expired. Click this link immediately to avoid account suspension: https://sbi-kyc-verify-secure.example.com/update",
+    url: "http://sbi-kyc-verify-secure.example.com/account-update?otp=1",
+    amount: 5000,
+    recipientName: "KYC Update Desk",
+    recipientUpi: "kyc-help@okaxis",
+    newRecipient: true,
+    knownRecipient: false,
+    device: {
+      remoteAccess: false,
+      screenSharing: false,
+      unknownSource: false,
+      accessibilityRisk: false,
+    },
+    expectedDecision: "HOLD",
+  },
+  {
+    id: "digital-arrest",
+    name: "Digital Arrest",
+    description: "Cyber crime impersonation demanding an immediate transfer.",
+    message:
+      "This is Cyber Crime Police. Your Aadhaar has been linked to illegal activity. Transfer money immediately for verification.",
+    url: "http://cybercell-verify.example.net/aadhaar",
+    amount: 85000,
+    recipientName: "Verification Cell",
+    recipientUpi: "verify.cell@okhdfcbank",
+    newRecipient: true,
+    knownRecipient: false,
+    device: {
+      remoteAccess: false,
+      screenSharing: false,
+      unknownSource: true,
+      accessibilityRisk: false,
+    },
+    expectedDecision: "BLOCK",
+  },
+  {
+    id: "fake-customer-care",
+    name: "Fake Customer Care",
+    description: "Refund lure that requests AnyDesk and screen sharing.",
+    message:
+      "Your refund is pending. Install AnyDesk and share your screen so we can process your refund.",
+    url: "https://refund-support-paytm.example.com/anydesk",
+    amount: 1,
+    recipientName: "Refund Support",
+    recipientUpi: "refund.desk@okicici",
+    newRecipient: true,
+    knownRecipient: false,
+    device: {
+      remoteAccess: true,
+      screenSharing: true,
+      unknownSource: true,
+      accessibilityRisk: false,
+    },
+    expectedDecision: "BLOCK",
+  },
+  {
+    id: "remote-access",
+    name: "Remote Access Scam",
+    description: "Support app plus accessibility permission request.",
+    message: "Install this support application and allow accessibility permission.",
+    url: "https://support-app-update.example.org/install",
+    amount: 2500,
+    recipientName: "Device Support",
+    recipientUpi: "device.help@okaxis",
+    newRecipient: true,
+    knownRecipient: false,
+    device: {
+      remoteAccess: true,
+      screenSharing: false,
+      unknownSource: true,
+      accessibilityRisk: true,
+    },
+    expectedDecision: "BLOCK",
+  },
+  {
+    id: "hinglish-upi",
+    name: "Hinglish UPI Scam",
+    description: "Roman Hindi urgency + KYC + small verification payment.",
+    message:
+      "Sir aapka bank account block hone wala hai. KYC update ke liye abhi link open karo aur ₹10 verification payment karo. Agar abhi nahi kiya to account permanently block ho jayega.",
+    url: "http://kyc-update-sbi.example.in/pay",
+    amount: 10,
+    recipientName: "KYC Verify",
+    recipientUpi: "kyc.verify@oksbi",
+    newRecipient: true,
+    knownRecipient: false,
+    device: {
+      remoteAccess: false,
+      screenSharing: false,
+      unknownSource: true,
+      accessibilityRisk: false,
+    },
+    expectedDecision: "BLOCK",
+  },
+];
+
+export function getScenario(id: string): DemoScenario | undefined {
+  return DEMO_SCENARIOS.find((s) => s.id === id);
+}
